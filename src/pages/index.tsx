@@ -45,6 +45,12 @@ export default function Home() {
     getTodos();
   };
 
+  const completeTodo = async (id: number) => {
+    const transaction = await contract.completeTodo(id);
+    await transaction.wait();
+    getTodos();
+  };
+
   return (
     <div>
       <Head>
@@ -74,6 +80,31 @@ export default function Home() {
                 +
               </button>
             </form>
+            <table>
+              <thead>
+                <tr>
+                  <th className="text-white">Name</th>
+                  <th className="text-white">Completed</th>
+                </tr>
+              </thead>
+              <tbody>
+                {todos.map(({ name, isCompleted }, index) => (
+                  <tr key={`${name}-${index}`}>
+                    <td className="text-white">{name}</td>
+                    <td>
+                      {!isCompleted && (
+                        <button
+                          className="ml-4 px-4 font-bold text-white bg-blue-600 hover:bg-blue-800"
+                          onClick={() => completeTodo(index)}
+                        >
+                          Complete
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </>
         )}
       </main>
