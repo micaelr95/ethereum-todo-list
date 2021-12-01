@@ -38,6 +38,13 @@ export default function Home() {
     }
   };
 
+  const addTodo = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const transaction = await contract.addTodo(newTodo);
+    await transaction.wait();
+    getTodos();
+  };
+
   return (
     <div>
       <Head>
@@ -47,6 +54,28 @@ export default function Home() {
 
       <Header />
       <main className="flex flex-col items-center justify-center bg-white dark:bg-gray-800 h-screen">
+        {active && (
+          <>
+            <form onSubmit={addTodo}>
+              <label htmlFor="todoInput" className="text-white">
+                Todo name:
+                <input
+                  className="text-white bg-gray-700 ml-4"
+                  name="todoInput"
+                  type="text"
+                  value={newTodo}
+                  onChange={(e) => setTodo(e.target.value)}
+                />
+              </label>
+              <button
+                type="submit"
+                className="ml-4 px-4 font-bold text-white bg-blue-600 hover:bg-blue-800"
+              >
+                +
+              </button>
+            </form>
+          </>
+        )}
       </main>
     </div>
   );
