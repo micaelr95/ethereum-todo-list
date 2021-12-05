@@ -9,6 +9,7 @@ import TodoListContract from '../../artifacts/contracts/TodoList.sol/TodoList.js
 import AddTodoForm from '../components/AddTodoForm';
 import Todo from '../Interfaces/todo';
 import { CONTRACT_ADDRESS } from '../constants/addresses';
+import TodoList from '../components/TodoList';
 
 const CONTRACT_ABI = TodoListContract.abi;
 
@@ -67,31 +68,7 @@ const Index = () => {
         {active && (
           <>
             <AddTodoForm addTodo={addTodo} />
-            <table>
-              <thead>
-                <tr>
-                  <th className="text-white">Name</th>
-                  <th className="text-white">Completed</th>
-                </tr>
-              </thead>
-              <tbody>
-                {todos.map(({ name, isCompleted }, index) => (
-                  <tr key={`${name}-${index}`}>
-                    <td className="text-white">{name}</td>
-                    <td>
-                      {!isCompleted && (
-                        <button
-                          className="ml-4 px-4 font-bold text-white bg-blue-600 hover:bg-blue-800"
-                          onClick={() => completeTodo(index)}
-                        >
-                          Complete
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <TodoList todos={todos} completeTodo={completeTodo} />
           </>
         )}
       </main>
