@@ -6,6 +6,8 @@ import { Web3Provider } from '@ethersproject/providers';
 import Header from '../components/Header';
 import { useContract } from '../hooks/useContract';
 import TodoListContract from '../../artifacts/contracts/TodoList.sol/TodoList.json';
+import AddTodoForm from '../components/AddTodoForm';
+import Todo from '../Interfaces/todo';
 
 const contractAddress = '0x6440a610bc426c75bbd237ef53a832c82e527f7d';
 const contractABI = TodoListContract.abi;
@@ -17,16 +19,20 @@ export default function Home() {
     contractABI,
     library?.getSigner()
   );
-  const [newTodo, setTodo] = useState('');
-  const [todos, setTodos] = useState<{ name: string; isCompleted: boolean }[]>(
-    []
-  );
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
     if (active) {
+      contract.on('NewTodo', eventHandler);
+      contract.on('TodoCompleted', eventHandler);
+
       getTodos();
     }
   }, [active]);
+
+  const eventHandler = (address: string, todoList: Todo[]) => {
+    setTodos(todoList);
+  };
 
   const getTodos = async () => {
     const count = await contract.getTodosCount();
@@ -41,13 +47,11 @@ export default function Home() {
   const addTodo = async (newTodo: string) => {
     const transaction = await contract.addTodo(newTodo);
     await transaction.wait();
-    getTodos();
   };
 
   const completeTodo = async (id: number) => {
     const transaction = await contract.completeTodo(id);
     await transaction.wait();
-    getTodos();
   };
 
   return (
