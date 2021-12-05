@@ -10,8 +10,8 @@ const TodoList: FC<{ todos: Todo[]; completeTodo: (index: number) => {} }> = ({
   <table>
     <thead>
       <tr>
+        <th></th>
         <th className="text-white">Name</th>
-        <th className="text-white">Completed</th>
       </tr>
     </thead>
     <tbody>

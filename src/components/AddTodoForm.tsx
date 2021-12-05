@@ -9,11 +9,11 @@ const AddTodoForm = ({ addTodo }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="mt-5 mb-10">
       <label htmlFor="todoInput" className="text-white">
-        Todo name:
+        Task name:
         <input
-          className="text-white bg-gray-700 ml-4"
+          className="text-white bg-gray-700 ml-4 focus:outline-none"
           name="todoInput"
           type="text"
           value={newTodo}
@@ -22,7 +22,7 @@ const AddTodoForm = ({ addTodo }) => {
       </label>
       <button
         type="submit"
-        className="ml-4 px-4 font-bold text-white bg-blue-600 hover:bg-blue-800"
+        className="ml-4 px-4 font-bold text-white bg-blue-600 hover:bg-blue-800 "
       >
         +
       </button>
