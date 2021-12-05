@@ -8,15 +8,15 @@ import { useContract } from '../hooks/useContract';
 import TodoListContract from '../../artifacts/contracts/TodoList.sol/TodoList.json';
 import AddTodoForm from '../components/AddTodoForm';
 import Todo from '../Interfaces/todo';
+import { CONTRACT_ADDRESS } from '../constants/addresses';
 
-const contractAddress = '0x6440a610bc426c75bbd237ef53a832c82e527f7d';
-const contractABI = TodoListContract.abi;
+const CONTRACT_ABI = TodoListContract.abi;
 
-export default function Home() {
+const Index = () => {
   const { active, account, library } = useWeb3React<Web3Provider>();
   const contract = useContract(
-    contractAddress,
-    contractABI,
+    CONTRACT_ADDRESS,
+    CONTRACT_ABI,
     library?.getSigner()
   );
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -37,11 +37,12 @@ export default function Home() {
   const getTodos = async () => {
     const count = await contract.getTodosCount();
 
-    setTodos([]);
+    const newTodoList: Todo[] = [];
     for (let index = 0; index < count.toNumber(); index++) {
       const todo = await contract.getTodo(index);
-      setTodos([...todos, { name: todo.name, isCompleted: todo.isCompleted }]);
+      newTodoList.push({ name: todo.name, isCompleted: todo.isCompleted });
     }
+    setTodos(newTodoList);
   };
 
   const addTodo = async (newTodo: string) => {
@@ -62,7 +63,7 @@ export default function Home() {
       </Head>
 
       <Header />
-      <main className="flex flex-col items-center justify-center bg-white dark:bg-gray-800 h-screen">
+      <main className="flex flex-col items-center bg-white dark:bg-gray-800 h-screen">
         {active && (
           <>
             <AddTodoForm addTodo={addTodo} />
@@ -96,4 +97,6 @@ export default function Home() {
       </main>
     </div>
   );
-}
+};
+
+export default Index;
